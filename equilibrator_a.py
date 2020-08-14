@@ -13,8 +13,10 @@ import pandas as pd
 import numpy as np
 import quilt
 
-from equilibrator_cache.api import create_compound_cache_from_sqlite_file
+from openbabel.pybel import readstring
+
 from equilibrator_cache import Compound, CompoundMicrospecies, Q_
+from equilibrator_cache.api import create_compound_cache_from_sqlite_file
 from equilibrator_cache.compound_cache import PROTON_INCHI_KEY
 from equilibrator_assets import chemaxon, thermodynamics
 
@@ -58,11 +60,8 @@ def get_compound(mol_string: str, update_cache: bool = True, auto_commit: bool =
         A Compound object that is used to calculate Gibbs free energy of formation and reactions.
 
     """
-    # Need to check here for valid SMILES/InChI
-    mol = AllChem.MolFromSmiles(mol_string)
-
     # First check to see if compound is in ccache through partial InChI key match
-    inchi_key = AllChem.MolToInchiKey(mol)
+    inchi_key = readstring('SMILES', mol_string).write("inchikey")
     cc_search = ccache.search_compound_by_inchi_key(inchi_key.split('-')[0])
 
     if cc_search:
@@ -71,22 +70,16 @@ def get_compound(mol_string: str, update_cache: bool = True, auto_commit: bool =
         cpd = _gen_compound(mol_string)
         # find next ID and add to sql database
         if update_cache == True:
-            # Stage the compound for addition to the sql
-            # an id will be automatically generated.
+            # Stage the compound for addition to the sqlite db
             ccache.session.add(cpd)
             # Flush executes the command queued up by session.add
-            # however, this does not commit to the database, it is temporary.
+            # temporary until .commit() is called
             ccache.session.flush()
-
             if auto_commit == True:
                 ccache.session.commit()
 
-            # populate the microspecies and flush
-            # _populate_microspecies(ccache.session, cpd)
-            # ccache.session.flush()
-
     # assign an id if one wasn't already
-    # need an id to calculate thermo
+    # need an id to calculate thermo properties
     if not cpd.id:
         cpd.id = -1
 
@@ -94,12 +87,12 @@ def get_compound(mol_string: str, update_cache: bool = True, auto_commit: bool =
 
 def _gen_compound(mol_string: str):
     """
-    Generate an equilibrator_cache Compound object directly from a SMILES or InChI. 
+    Generate an equilibrator_cache Compound object directly from a SMILES. 
 
     Parameters
     ----------
     mol_string : str
-        A text description of the molecule(s) (SMILES or InChI).
+        A text description of the molecule(s) (SMILES).
 
     Returns
     -------   
@@ -119,7 +112,7 @@ def _gen_compound(mol_string: str):
 
     # Calculate values to populate microspecies
     constants, pka_columns = chemaxon.get_dissociation_constants(
-        molecules, "foo", num_acidic=20, num_basic=20, mid_ph=mid_ph
+        molecules, '', num_acidic=20, num_basic=20, mid_ph=mid_ph
     )
 
     # Taken from equilibrator_assets/thermodynamics.py

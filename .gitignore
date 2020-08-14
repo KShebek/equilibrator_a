@@ -11,3 +11,7 @@ __pycache__/
 
 # certain ipynb
 ./ccache_update_test.ipynb
+
+# misc
+.vscode
+.pytest_cache
