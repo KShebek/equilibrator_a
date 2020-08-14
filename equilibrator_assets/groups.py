@@ -619,5 +619,4 @@ class GroupVector(list):
             if count != 0
         }
 
-
 DEFAULT_GROUPS_DATA = GroupsData.FromQuilt()

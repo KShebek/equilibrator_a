@@ -23,9 +23,6 @@ from equilibrator_assets import chemaxon, thermodynamics
 # The following modules were added from component_contribution/scripts/support
 import group_decompose, molecule
 
-# TODO: Use openbabel to reduce dependencies
-from rdkit.Chem import AllChem
-
 LOG10 = np.log(10.0)
 CACHE_PATH = './cache'
 SQLITE_PATH = Path('./cache/compounds.sqlite')
