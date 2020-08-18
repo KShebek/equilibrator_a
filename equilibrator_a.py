@@ -11,7 +11,7 @@ import quilt
 from openbabel.pybel import readstring
 
 from equilibrator_cache.api import create_compound_cache_from_sqlite_file
-from equilibrator_assets.generate_compound import get_or_create_compound
+from equilibrator_assets.generate_compound import create_compound
 
 LOG10 = np.log(10.0)
 CACHE_PATH = './cache'
