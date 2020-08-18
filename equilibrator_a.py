@@ -42,7 +42,7 @@ group_decomposer = group_decompose.GroupDecomposer()
 
 ###############################################################################
 # KMS Code
-def get_compound(mol_string: str, update_cache: bool = True, auto_commit: bool = False):
+def get_compound(mol_string: str, update_cache: bool = True, auto_commit: bool = True):
     """
     Gets a compound object from the compound cache, or generates one if not found.
 
@@ -59,7 +59,7 @@ def get_compound(mol_string: str, update_cache: bool = True, auto_commit: bool =
     """
     # First check to see if compound is in ccache through partial InChI key match
     inchi_key = readstring('SMILES', mol_string).write("inchikey")
-    cc_search = ccache.search_compound_by_inchi_key(inchi_key.split('-')[0])
+    cc_search = ccache.search_compound_by_inchi_key(inchi_key.rsplit('-',1)[0])
 
     if cc_search:
         cpd = cc_search[0]
