@@ -14,6 +14,7 @@ import numpy as np
 import quilt
 
 from openbabel.pybel import readstring
+from rdkit.Chem import AllChem
 
 from equilibrator_cache import Compound, CompoundMicrospecies, Q_
 from equilibrator_cache.api import create_compound_cache_from_sqlite_file
@@ -58,6 +59,7 @@ def get_compound(mol_string: str, update_cache: bool = True, auto_commit: bool =
 
     """
     # First check to see if compound is in ccache through partial InChI key match
+    # Can switch back to RDKit here
     inchi_key = readstring('SMILES', mol_string).write("inchikey")
     cc_search = ccache.search_compound_by_inchi_key(inchi_key.rsplit('-',1)[0])
 
