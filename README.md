@@ -1,5 +1,3 @@
-# equilibrator_a
-
 ## ‼️ IMPORTANT ‼️
 ### This repo has been incoporated fully into eQuilibrator in the following [repo](https://gitlab.com/KShebek/equilibrator-assets), which is a fork of equilibrator_assets. This code will eventually be merged into the equilibrator master branch. 
 
@@ -7,6 +5,8 @@
 
 ## Incorporation into eQuilibrator
 This repository started out as a way to generate the thermodynamic compounds of biochemical species given a SMILES string. Elad Noor has since incorporated the work I did here into [equilibrator_assets](https://gitlab.com/equilibrator/equilibrator-assets). With [examples of how to use here](https://gitlab.com/equilibrator/equilibrator-assets/-/blob/master/notebooks/generate_compound.ipynb). [Further work](https://gitlab.com/KShebek/equilibrator-assets) done here to incorporate a local database have been integrated into the eQuilibrator environment as well.
+
+# equilibrator_a
 
 ## Overview
 This repository builds upon arbitrary SMILES support for [equilibrator](https://gitlab.com/equilibrator), the biochemical thermodynamic calculator and incorporates the results into a database for later retrieval. 
